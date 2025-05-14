@@ -9,16 +9,16 @@ interface FetchResponse {
 }
 
 const Sidebar: React.FC = () => {
-	const [products, setProducts] = useState<string[]>([]);
+	const [categories, setCategories] = useState<string[]>([]);
 
-	// const [keywords] = useState<string[]>([
-	//   "Apple",
-	//   "Banana",
-	//   "Cherry",
-	//   "Date",
-	//   "Elderberry",
-	//   "Fig",
-	// ]);
+	const [keywords] = useState<string[]>([
+		'Apple',
+		'Banana',
+		'Cherry',
+		'Date',
+		'Elderberry',
+		'Fig',
+	]);
 
 	useEffect(() => {
 		const fetchCategories = async () => {
@@ -28,8 +28,7 @@ const Sidebar: React.FC = () => {
 				const uniqueCategory = Array.from(
 					new Set(data.products.map((product) => product.category))
 				);
-				console.log(uniqueCategory);
-				setProducts(uniqueCategory);
+				setCategories(uniqueCategory);
 			} catch (error) {
 				console.error('Error fetching categories:', error);
 			}
@@ -60,6 +59,29 @@ const Sidebar: React.FC = () => {
 						placeholder='Max'
 					/>
 				</div>
+
+				<div>
+					<h2>Categories</h2>
+					{categories.map((category, index) => (
+						<label key={index} className='block mb-2 cursor-pointer'>
+							<input type='radio' name='category' value={category} />
+							{category.toUpperCase()}
+						</label>
+					))}
+				</div>
+
+				<section>
+					<div>
+						<h2>Keywords</h2>
+					</div>
+					{keywords.map((keyword, index) => (
+						<button
+							key={index}
+							className='flex w-full hover:bg-amber-100 mb-2 cursor-pointer p-2 rounded'>
+							{keyword}
+						</button>
+					))}
+				</section>
 			</section>
 		</div>
 	);
