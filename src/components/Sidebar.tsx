@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
+import { useFilter } from './FilterContext';
 
 interface Product {
 	category: string;
@@ -9,6 +10,8 @@ interface FetchResponse {
 }
 
 const Sidebar: React.FC = () => {
+	const { searchQuery, setSearchQuery, minPrice, setMinPrice, maxPrice, setMaxPrice } =
+		useFilter();
 	const [categories, setCategories] = useState<string[]>([]);
 
 	const [keywords] = useState<string[]>([
@@ -37,6 +40,16 @@ const Sidebar: React.FC = () => {
 		fetchCategories();
 	}, []);
 
+	const handleMinPriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		const value = e.target.value;
+		setMinPrice(value ? parseFloat(value) : undefined);
+	};
+
+	const handleMaxPriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		const value = e.target.value;
+		setMaxPrice(value ? parseFloat(value) : undefined);
+	};
+
 	return (
 		<div className='w-64 p-5 h-screen bg-amber-50'>
 			<h2 className='mb-4'>Product Categories</h2>
@@ -45,6 +58,8 @@ const Sidebar: React.FC = () => {
 					type='text'
 					className='border-2 rounded px-2 sm:mb-0 w-full'
 					placeholder='Search Products'
+					value={searchQuery}
+					onChange={(e) => setSearchQuery(e.target.value)}
 				/>
 
 				<div className='flex gap-2'>
@@ -52,11 +67,15 @@ const Sidebar: React.FC = () => {
 						type='text'
 						className='border-2 rounded px-2 sm:mb-0 w-full'
 						placeholder='Min'
+						value={minPrice ?? ''}
+						onChange={handleMinPriceChange}
 					/>
 					<input
 						type='text'
 						className='border-2 rounded px-2 sm:mb-0 w-full'
 						placeholder='Max'
+						value={maxPrice ?? ''}
+						onChange={handleMaxPriceChange}
 					/>
 				</div>
 
@@ -82,6 +101,10 @@ const Sidebar: React.FC = () => {
 						</button>
 					))}
 				</section>
+
+				<button className='bg-amber-200 hover:bg-amber-300 p-2 rounded'>
+					Reset Filter
+				</button>
 			</section>
 		</div>
 	);
