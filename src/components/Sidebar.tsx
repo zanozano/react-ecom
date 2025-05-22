@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useFilter } from './FilterContext';
 
 interface Product {
@@ -10,8 +10,17 @@ interface FetchResponse {
 }
 
 const Sidebar: React.FC = () => {
-	const { searchQuery, setSearchQuery, minPrice, setMinPrice, maxPrice, setMaxPrice } =
-		useFilter();
+	const {
+		searchQuery,
+		setSearchQuery,
+		minPrice,
+		setMinPrice,
+		maxPrice,
+		setMaxPrice,
+		setSelectedCategory,
+		selectedCategory,
+		setKeyword,
+	} = useFilter();
 	const [categories, setCategories] = useState<string[]>([]);
 
 	const [keywords] = useState<string[]>([
@@ -50,6 +59,22 @@ const Sidebar: React.FC = () => {
 		setMaxPrice(value ? parseFloat(value) : undefined);
 	};
 
+	const handleRadioChangeCategory = (category: string) => {
+		setSelectedCategory(category);
+	};
+
+	const handleKeywordChange = (keyword: string) => {
+		setKeyword(keyword);
+	};
+
+	const handleResetFilters = () => {
+		setSearchQuery('');
+		setSelectedCategory('');
+		setMinPrice(undefined);
+		setMaxPrice(undefined);
+		setKeyword('');
+	};
+
 	return (
 		<div className='w-64 p-5 h-screen bg-amber-50'>
 			<h2 className='mb-4'>Product Categories</h2>
@@ -83,7 +108,14 @@ const Sidebar: React.FC = () => {
 					<h2>Categories</h2>
 					{categories.map((category, index) => (
 						<label key={index} className='block mb-2 cursor-pointer'>
-							<input type='radio' name='category' value={category} />
+							<input
+								type='radio'
+								name='category'
+								value={category}
+								onChange={() => handleRadioChangeCategory(category)}
+								className='mr-2'
+								checked={selectedCategory === category}
+							/>
 							{category.toUpperCase()}
 						</label>
 					))}
@@ -96,13 +128,16 @@ const Sidebar: React.FC = () => {
 					{keywords.map((keyword, index) => (
 						<button
 							key={index}
+							onClick={() => handleKeywordChange(keyword)}
 							className='flex w-full hover:bg-amber-100 mb-2 cursor-pointer p-2 rounded'>
 							{keyword}
 						</button>
 					))}
 				</section>
 
-				<button className='bg-amber-200 hover:bg-amber-300 p-2 rounded'>
+				<button
+					onClick={handleResetFilters}
+					className='bg-amber-200 hover:bg-amber-300 p-2 rounded'>
 					Reset Filter
 				</button>
 			</section>
