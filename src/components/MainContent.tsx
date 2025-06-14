@@ -76,7 +76,6 @@ const MainContent = () => {
 	};
 
 	const filteredProducts = getFilteredProducts();
-
 	const totalPages = Math.ceil(totalProducts / itemsPerpage);
 
 	const paginationRange = () => {
@@ -86,22 +85,10 @@ const MainContent = () => {
 		const right = Math.min(totalPages - 1, currentPage + delta);
 
 		range.push(1);
-
-		if (left > 2) {
-			range.push('...');
-		}
-
-		for (let i = left; i <= right; i++) {
-			range.push(i);
-		}
-
-		if (right < totalPages - 1) {
-			range.push('...');
-		}
-
-		if (totalPages > 1) {
-			range.push(totalPages);
-		}
+		if (left > 2) range.push('...');
+		for (let i = left; i <= right; i++) range.push(i);
+		if (right < totalPages - 1) range.push('...');
+		if (totalPages > 1) range.push(totalPages);
 
 		return range;
 	};
@@ -179,7 +166,7 @@ const MainContent = () => {
 					{filteredProducts.length === 0 ? (
 						<div className='col-span-4 flex flex-col items-center justify-center text-gray-500 mt-10'>
 							<AlertCircle className='w-12 h-12 mb-3' />
-							<p>No hay productos en la búsqueda.</p>
+							<p>No products found.</p>
 						</div>
 					) : (
 						filteredProducts.map((product) => (
@@ -202,7 +189,7 @@ const MainContent = () => {
 										<p className='text-xs flex items-center text-yellow-500'>
 											<Star className='w-4 h-4 mr-1' />
 											{product.rating}
-										</p>{' '}
+										</p>
 									</div>
 								</div>
 							</div>
@@ -219,7 +206,7 @@ const MainContent = () => {
 								? 'bg-gray-200 cursor-not-allowed'
 								: 'bg-white hover:bg-gray-100'
 						}`}>
-						Anterior
+						Previous
 					</button>
 
 					{paginationRange().map((page, idx) =>
@@ -249,7 +236,7 @@ const MainContent = () => {
 								? 'bg-gray-200 cursor-not-allowed'
 								: 'bg-white hover:bg-gray-100'
 						}`}>
-						Siguiente
+						Next
 					</button>
 				</div>
 			</div>
